@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styles %}
+
+{% block title %}
+Tech Haven - Мои заказы
+{% endblock %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/cart.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/cart_responsive.css' %}">
+
+<style>
+.cart_item_image div{
+	margin: 0 auto
+}
+.cart_item_image div img{
+	max-width: 50%;
+	margin: 0 auto;
+}
+.cart_item_total {
+    width: 30%;
+    text-align: right;
+}
+.separator{
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: #e3e3e3;
+	border-radius: 100%;
+}
+form{
+	width: 50%;
+}
+.red_but::after{
+	background-color: #A90A0C;
+}
+
+</style>
+{% endblock %}
+{% block content %}
+	<div class="home">
+		<div class="home_container">
+			<div class="home_background" style="background-image:url(/static/images/cart.jpg)"></div>
+			<div class="home_content_container">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="home_content">
+								<div class="home_title">Детали заказа #{{order.id}}<span>.</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cart_info">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="cart_info_columns clearfix">
+						<div class="cart_info_col cart_info_col_product">Товар</div>
+						<div class="cart_info_col cart_info_col_price">Цена</div>
+						<div class="cart_info_col cart_info_col_quantity">Кол-во</div>
+						<div class="cart_info_col cart_info_col_total">Total</div>
+					</div>
+				</div>
+			</div>			
+			{% for item in order.get_items %}
+					<div class="row cart_items_row">
+						<div class="col">
+								<div class="cart_item d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+									<div class="cart_item_product d-flex flex-row align-items-center justify-content-start">
+										<div class="cart_item_image">
+											<div>
+												<img src="{{item.product.photo.url}}" alt="">
+											</div>
+										</div>
+										<div class="cart_item_name_container">
+											<div class="cart_item_name">
+												<a href="{% url 'product_detail' category_slug=item.product.category.slug pk=item.product.vendor_code %}">
+													{{item.product.name}}<br>
+													{{item.product.color}}
+												</a>
+											</div>
+										</div>
+									</div>
+									<div class="cart_item_price">{{item.product_price}} ₽</div>
+									<div class="cart_item_quantity">{{item.quanity}} шт</div>
+								<div class="cart_item_total">{{ item.amount }} ₽</div>
+							</div>
+						</div>
+					</div>
+			{% endfor %}
+			<div class="separator"></div>
+			<div class="cart_total_container mb-5">
+				<div class="row cart_items_row mb-3">
+					<div class="col-lg-3 ">
+						<div class="cart_item_name">Итоговая стоимость</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="cart_total_title">{{order.amount}} ₽</div>
+					</div>
+				</div>
+				<div class="row cart_items_row mb-3">
+					<div class="col-lg-3 ">
+						<div class="cart_item_name">Адрес доставки</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="cart_total_title">{{order.delivery_adres}}</div>
+					</div>
+				</div>
+				<div class="row cart_items_row mb-3">
+					<div class="col-lg-3 ">
+						<div class="cart_item_name">Дата создания заказа</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="cart_total_title">{{order.time_craeted}}</div>
+					</div>
+				</div>
+				{% if order.status == 'confirm_pay' %}
+					<div class="row cart_items_row mb-3">
+						<div class="col-lg-3 ">
+							<div class="cart_item_name">Оплатите заказ до</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="cart_total_title">{{date_expire }}</div>
+						</div>
+					</div>
+				{% endif %}
+				<div class="row cart_items_row mb-5">
+					<div class="col-lg-3 ">
+						<div class="cart_item_name">Статус заказа</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="cart_total_title" style="color: {{order.get_color}}">
+							{{order.get_status}}
+						</div>
+					</div>
+				</div>
+				<div class="row cart_items_row ">
+					{% if pay_url %}
+						<div class="col-lg-6">
+							<div class="button checkout_button">
+								<a href="{{pay_url}}">Оплатить</a>
+							</div>
+						</div>
+						<form id='revoke_order' class="col-lg-6" method="POST" action="{% url 'revoke_order' pk=order.id %}">
+							{% csrf_token %}
+							<div >
+								<div class="button red_but checkout_button">
+									<a href="#" onclick="event.preventDefault(); document.getElementById('revoke_order').submit()">
+										Отменить заказ
+									</a>
+								</div>
+							</div>
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		</div>		
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Письмо</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body style="margin: 0; padding: 0;">
+    <table align="center"  cellpadding="0" cellspacing="0" width="600">
+        <tr>
+            <td  style="font-size: 50px; text-align: center;">
+                Tech Haven<span style="color: red">.</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="https://techhaven.site/">
+                    <img alt='icon' src="cid:icon" width="200" height="200" style="display: block; margin: 0 auto" border="0" />
+                   </a>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td style="padding: 7px;">
+                            Привет!
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 7px;">
+                            Спасибо за регистрацию на нашем сайте. 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 7px;">
+                            Ваш код доступа - <span style="color:cornflowerblue">{{code_confirm|stringformat:"s"}}</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="border-top:1px solid black ;">
+                <table style='font-size:12px' cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td style="padding: 7px;" width="86%">
+                            Иван Власов<span style="color: red">.</span>
+                        </td>
+
+                        <td style="padding: 7px;" width="6%">
+                            <a href="https://vk.com/vvlsv">
+                                <img alt='vk' src="cid:vk" width="30" height="30" style="display: block; margin: 0 auto" border="0" />
+                            </a>
+                        </td>
+
+                        <td style="padding: 7px;" width="6%">
+                            <a href="https://t.me/ivlsv">
+                                <img alt='tg' src="cid:tg" width="30" height="30" style="display: block; margin: 0 auto" border="0" />
+                            </a>
+                        </td>
+                    </tr>
+
+                </table>
+        
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

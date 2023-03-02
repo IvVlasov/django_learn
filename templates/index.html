@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Tech Haven - Главная страница
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css' %}">
+
+{% endblock %}
+
+{% block content %}
+<style>
+.black_background{
+	background-color: black;
+	opacity: 0.3;
+	width: 100%;
+	display: block;
+	height: 100%;
+}
+</style>
+
+<div class="home">
+	{% if sliders %}
+	<div class="home_slider_container">
+		
+		<div class="owl-carousel owl-theme home_slider">
+			{% for slider in sliders %}
+				<div class="owl-item home_slider_item">
+
+					<div class="home_slider_background" style="background-image:url(/media/{{slider.photo}})">
+						<div class="black_background"></div>
+					</div>
+					<div class="home_slider_content_container">
+						<div class="container">
+							<div class="row">
+								<div class="col">
+									<div class="home_slider_content"  data-animation-in="fadeIn" data-animation-out="animate-out fadeOut">
+										<div class="home_slider_title">{{slider.header}}<span class="dot">.</span></div>
+										{% if slider.description %}
+											<div class="home_slider_subtitle">{{slider.description}}</div>
+										{% endif %}
+										{% if slider.url %}
+										<div class="button button_light home_button"><a href="{{slider.url}}">Перейти</a></div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		
+		<div class="home_slider_dots_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="home_slider_dots">
+							<ul id="home_slider_custom_dots" class="home_slider_custom_dots">
+								<li class="home_slider_custom_dot active">01.</li>
+								{% for slider in sliders %}
+									{% if forloop.counter == 1%}
+									{% else %}
+									
+									<li class="home_slider_custom_dot">0{{ forloop.counter }}.</li>
+									{% endif %}
+
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+
+	{% else %}
+	<div class="home_slider_container">
+		<div class="owl-carousel owl-theme home_slider">
+			<div class="owl-item home_slider_item">
+				<div class="home_slider_background" style="background-image:url(static/images/home_slider_1.jpg)"><div class="black_background"></div></div>
+				<div class="home_slider_content_container">
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								<div class="home_slider_content"  data-animation-in="fadeIn" data-animation-out="animate-out fadeOut">
+									<div class="home_slider_title">Новый онлайн магазин цифровой теники</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+
+
+</div>	
+
+<div class="avds">
+	<div class="avds_container d-flex flex-lg-row flex-column align-items-start justify-content-between">
+		<div class="avds_small">
+			<div class="avds_background" style="background-image:url(/media/{{page_cats.left.photo}})"><div class="black_background"></div></div>
+			<div class="avds_small_inner">
+				<div class="avds_discount_container">
+					<img src="{% static 'images/discount.png' %}" alt="">
+					<div>
+						<div class="avds_discount">
+							<div>20<span>%</span></div>
+							<div>скидка</div>
+						</div>
+					</div>
+				</div>
+				<div class="avds_small_content">
+					<div class="avds_title">{{page_cats.left.name}}<span class="dot">.</span></div>
+					{% if page_cats.left.description %}
+						<div class="avds_text">{{page_cats.left.description}}</div>
+					{% endif %}
+					<div class="avds_link"><a href="{% url 'shop' category=page_cats.left.slug %}">Перейти</a></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="avds_large">
+			<div class="avds_background" style="background-image:url(/media/{{page_cats.right.photo}})"><div class="black_background"></div></div>
+			<div class="avds_large_container">
+				<div class="avds_large_content">
+					<div class="avds_title">{{page_cats.right.name}}<span class="dot">.</span></div>
+					{% if page_cats.left.description %}
+						<div class="avds_text">{{page_cats.right.description}}</div>
+					{% endif %}
+					<div class="avds_link avds_link_large"><a href="{% url 'shop' category=page_cats.right.slug %}">Перейти</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="products">
+	<div class="container">
+		<div class="row">
+			<div class="col text-center">
+				<div class="products_title">Рекомендации</div>
+			</div>
+		</div>
+
+		<div class="row ">
+			{% for product in random_products%}
+			<div class="col-sm-3 my-5 col-6">
+				<div class="product_image">
+					<img src="{{product.photo.url}}" alt="">
+				</div>
+				<div class="product_content">
+					<div class="product_title"><a href="{% url 'product_detail' category_slug=product.category.slug pk=product.vendor_code %}">{{product.name}}</a></div>
+
+					<div class="product_price">{{product.price}}₽</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+
+{% block scripts %}
+<script src="{% static 'js/custom.js' %}"></script>
+
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Tech Haven - Мои заказы
+{% endblock %}
+
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/orders_list.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/cart_responsive.css' %}">
+
+{% endblock %}
+{% block content %}
+	<div class="home">
+		<div class="home_container">
+			<div class="home_background" style="background-image:url(/static/images/cart.jpg)"></div>
+			<div class="home_content_container">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="home_content">
+								<div class="home_title">Заказы<span>.</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cart_info pb-5">
+		<div class="container">
+			<div class="row orders_header">
+					<div class="col-lg-2 cart_item_name_container">Номер заказа</div>
+					<div class="col-lg-3 cart_item_name_container">Дата</div>
+					<div class="col-lg-2 cart_item_name_container">Статус</div>
+					<div class="col-lg-2 cart_item_name_container not_med">Кол-во товаров</div>
+					<div class="col-lg-3 cart_item_name_container">Сумма</div>
+			</div>
+			<div class="separator" style="background-color:#000"></div>
+			{% if not orders %}
+				<div class="row">
+					<div class="col-lg-12 cart_item_name_container">У вас нет заказов</div>
+				</div>
+			{% endif %}
+			{% for order in orders %}
+					<a href="{% url 'order_detail' pk=order.id %}" class="row cart_items_row order_item">
+						<div class="col-lg-2 cart_item_name_container">{{order.id}}</div>
+						<div class="col-lg-3 cart_item_name_container">{{order.time_craeted}}</div>
+						<div class="col-lg-2 cart_item_name_container">
+							<span style="color:{{order.get_color}}">
+							{{order.get_status}}
+							</span>
+						</div>
+						<div class="col-lg-2 cart_item_name_container not_med">{{order.get_items | length}}</div>
+						<div class="col-lg-3 cart_item_name_container">{{ order.amount }} ₽</div>
+					</a>
+					<div class="separator"></div>
+			{% endfor %}
+		</div>		
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

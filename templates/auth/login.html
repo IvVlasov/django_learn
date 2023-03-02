@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/orders_list.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/contact.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/contact_responsive.css' %}">
+
+{% endblock %}
+
+{% block title %}
+Вход - Tech Haven
+{% endblock %}
+
+{% block content %}
+
+	<!-- Home -->
+
+	<div class="home">
+		<div class="home_container">
+			<div class="home_background" style="background-image:url(/static/images/contact.jpg)"></div>
+			<div class="home_content_container">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="home_content">
+								<div class="home_title">Вход<span>.</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Contact -->
+	
+	<div class="contact">
+		<div class="container">
+			<div class="row bg-white">
+				<div class="col-lg-8 contact_col offset-xl-3">
+					<div class="get_in_touch">
+						<div class="section_subtitle"><span style="color:red">{{message}}</span></div>
+						<div class="contact_form_container">
+							{% if form.non_field_errors %}
+								<ul>
+								{% for error in form.non_field_errors %} 
+									<li><span style="color: red">{{ error }}</span></li>
+								{% endfor %}
+								</ul>
+							{% endif %} 
+
+								<form method="post">
+								{% csrf_token %}
+
+								<div class="row">
+									<div class="col-xl-8">										
+									<label for="contact_name">Email </label>
+										{{ form.username }}
+									</div>
+								</div>
+	
+								<div class="row">
+									<div class="col-xl-8">
+										<label for="contact_name">Пароль <span style="color: red">{{form.errors.password}}</span></label>
+										{{ form.password }}
+									</div>
+								</div>
+								<button type="submit"class="button contact_button"><span>Войти</span></button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+
+		</div>
+	</div>
+
+	{% endblock %}
+	{% block scripts %}
+	<script src="{% static 'js/product.js' %}"></script>
+	{% endblock %}

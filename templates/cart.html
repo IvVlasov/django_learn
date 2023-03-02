@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/cart.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/cart_responsive.css' %}">
+{% endblock %}
+
+{% block title %}
+Корзина - Tech Haven
+{% endblock %}
+
+{% block content %}
+
+	<div class="home">
+		<div class="home_container">
+				<div class="home_background" style="background-image:url(/static/images/cart.jpg)"></div>
+
+			<div class="home_content_container">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="home_content">
+								<div class="home_title">Корзина<span>.</span></div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="cart_info">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<!-- Column Titles -->
+					<div class="cart_info_columns clearfix">
+						<div class="cart_info_col cart_info_col_product">Товар</div>
+						<div class="cart_info_col cart_info_col_price">Цена</div>
+						<div class="cart_info_col cart_info_col_quantity">Кол-во</div>
+						<div class="cart_info_col cart_info_col_total">Стоимость</div>
+					</div>
+				</div>
+			</div>
+			{% for item in cart %}
+				{% with product=item.product %}
+					<div class="row cart_items_row">	
+						<div class="col">
+								<!-- Cart Item -->
+								<div class="cart_item d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+									<!-- Name -->
+									<div class="cart_item_product d-flex flex-row align-items-center justify-content-start">
+										<div class="cart_item_image">
+											<div><img src="{{product.photo.url}}" alt=""></div>
+										</div>
+										<div class="cart_item_name_container">
+											<div class="cart_item_name">
+												<a href="{% url 'product_detail' category_slug=product.category.slug pk=product.vendor_code %}">
+													{{product.name}}<br>
+													{{product.color}}
+												</a>
+											</div>
+											<div class="cart_item_edit"><a href="{% url 'cart_remove' article=product.vendor_code %}">Удалить товар</a></div>
+											<div class="cart_item_price only_media">{{product.price}} ₽</div>
+
+										</div>
+									</div>
+									<!-- Price -->
+									<div class="cart_item_price">{{product.price}} ₽</div>
+									<!-- Quantity -->
+									<div class="cart_item_quantity">
+										<div class="product_quantity_container">
+											<div class="product_quantity clearfix">
+												<!-- <span>кол-во</span> -->
+												<input id="quantity_input" type="text" pattern="[0-9]*" value="{{item.quantity}}" data-product-article="{{product.vendor_code}}">
+												<div class="quantity_buttons">
+													<a href="{% url 'cart_update_quantity' article=product.vendor_code quantity=1 mode='plus' %}">
+													<div id="quantity_inc_button" class="quantity_inc quantity_control">
+														<i class="fa fa-chevron-up" aria-hidden="true"></i>
+													</div>
+													</a>
+													<a href="{% url 'cart_update_quantity' article=product.vendor_code quantity=1 mode='minus' %}">
+													<div id="quantity_dec_button" class="quantity_dec quantity_control">
+														<i class="fa fa-chevron-down" aria-hidden="true"></i>
+													</div>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								<div class="cart_item_total"><span class="only_media">Сумма: </span>{{ item.total_price }} ₽</div>
+								<!-- Total -->
+							</div>
+						</div>
+					</div>
+				{% endwith %}
+			{% endfor %}
+
+			<div class="row row_extra">
+				<div class="col-lg-12">
+					<div class="cart_total">
+						<div class="section_title">Корзина</div>
+						<div class="section_subtitle">Итоговая информация</div>
+						<div class="cart_total_container">
+							<ul>
+
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="cart_total_title">Итоговая стоимость</div>
+									<div class="cart_total_value ml-auto">{{ cart.get_total_price }} ₽</div>
+								</li>
+							</ul>
+						</div>
+							<br>
+							<div class="button checkout_button"><a href="{% url 'new_order' %}">Оформить заказ</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

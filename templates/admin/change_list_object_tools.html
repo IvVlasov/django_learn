@@ -1,0 +1,14 @@
+{% extends "admin/change_list_object_tools.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+{{ block.super }}
+{% if has_add_permission %}
+    {% url cl.opts|admin_urlname:'add' as add_url %}
+    {% if cl.opts.object_name == 'Parser' %}
+        <li>
+            <a style='background-color: green;' href="{% url 'fill_database' %}" class="addlink">Спарсить магазины</a>
+        </li>
+    {% endif %}
+{% endif %}
+{% endblock %}

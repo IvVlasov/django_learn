@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/categories.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/categories_responsive.css' %}">
+{% endblock %}
+
+{% block title %}
+Tech Haven - {{category.name}}
+{% endblock %}
+
+{% block content %}
+<style>	
+.black_background{
+	background-color: black;
+	opacity: 0.75;
+	width: 100%;
+	display: block;
+	height: 100%;
+}
+</style>
+<div class="home">
+	<div class="home_container">
+		{% if category.photo %}
+			<div class="home_background" style="background-image:url(/media/{{category.photo}})">
+				<div class="black_background"></div>
+			</div>
+		{% else %}
+			<div class="home_background" style="background-image:url(/static/images/categories.jpg)"></div>
+		{% endif %}
+		<div class="home_content_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="home_content">
+							<div class="home_title">{{category.name}}<span>.</span></div>
+
+							{% if category.description %}
+								<div class="home_text">
+									<p>{{category.description}}</p>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="products mb-5">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="sorting_bar d-flex flex-md-row flex-column align-items-md-center justify-content-md-start">
+					<ul class="item_sorting">
+						<li> 
+							<span class="sorting_text">Показано <span>{{page_obj.object_list.count}}</span> товаров </span>
+							<i class="fa fa-chevron-down" aria-hidden="true"></i>
+							<ul>
+								{% for val in products_count %}
+									{% if val <= page_obj.paginator.count|add:products_count.0 %}
+										<li class="product_sorting_btn">
+											<a href="?page=1&order={{sort_by.value}}&results={{val}}"><span>показать {{val}}</span></a>
+										</li>
+									{% endif %}
+								{% endfor %}
+							</ul>
+						</li>
+					</ul>
+
+					<div class="sorting_container ml-md-auto">
+						<div class="sorting">
+							<ul class="item_sorting">
+								<li>
+									<span class="sorting_text">{{sort_by.icon}} Сортировка цены </span>
+									<i class="fa fa-chevron-down" aria-hidden="true"></i>
+									<ul>
+										<li class="product_sorting_btn">
+											<a href="?page={{page_obj.number}}&order=up&results={{paginate_by}}"><span>по возрастанию</span></a>
+										</li>
+										<li class="product_sorting_btn">
+											<a href="?page={{page_obj.number}}&order=down&results={{paginate_by}}"><span>по убыванию</span></a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			{% for product in products%}
+			<div class="col-sm-3 col-6">
+				<div class="product_image">
+					<img src="{{product.photo.url}}" alt="">
+				</div>
+				<div class="product_content">
+					<div class="product_title"><a href="{% url 'product_detail' category_slug=category.slug pk=product.vendor_code %}">{{product.name}}</a></div>
+
+					<div class="product_price">{{product.price}}₽</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			<div class="col">
+
+				{% if is_paginated %}
+					<div class="product_pagination">
+						<ul>
+							{% for i in page_obj.paginator.page_range %}
+								{% if i == page_obj.number %}
+									<li class="active"><a href="?page={{i}}&order={{sort_by.value}}&results={{paginate_by}}">{{i}}.</a></li>
+								{% else %}
+									<li><a href="?page={{i}}&order={{sort_by.value}}&results={{paginate_by}}">{{i}}.</a></li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/categories.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styles %}
+
+{% block title %}
+{{product.name}}
+{% endblock %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'styles/product.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/product_responsive.css' %}">
+{% endblock %}
+{% block content %}
+<style>	
+	.black_background{
+		background-color: black;
+		opacity: 0.75;
+		width: 100%;
+		display: block;
+		height: 100%;
+	}
+
+</style>
+<div class="home">
+	<div class="home_container">
+		{% if product.category.photo %}
+		<div class="home_background" style="background-image:url(/media/{{product.category.photo}})">
+			<div class="black_background"></div>
+		</div>
+		{% else %}
+			<div class="home_background" style="background-image:url(/static/images/categories.jpg)"></div>
+		{% endif %}
+
+		<div class="home_content_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="home_content">
+							<div class="home_title">{{product.category.name}}<span>.</span></div>
+							{% if product.category.description %}
+								<div class="home_text">
+									<p>{{product.category.description}}</p>
+								</div>
+							{% endif %}	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="product_details">
+	<div class="container">
+		<div class="row details_row">
+			<div class="col-lg-6">
+				<div class="details_image">
+					<div class="details_image_large">
+						<img src="{{product.photo.url}}" alt="">
+				</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="details_content">
+					<div class="details_name">{{product.name}}<br>{{product.color}}</div>
+					<div class="details_discount">{{price_before_discount}} ₽</div>
+					<div class="details_price">{{product.price}} ₽</div>
+
+					<div class="in_stock_container">
+						<div class="availability">Наличие:</div>
+						<span>Есть в наличии</span>
+					</div>
+
+					<form id="add_to_cart" action="{% url 'cart_add' article=product.vendor_code %}" method="post">
+						{% csrf_token %}
+						<div class="product_quantity_container">
+							<div class="product_quantity clearfix">
+								<span>кол-во</span>
+								{{ cart_product_form.quantity }}
+								<div class="quantity_buttons">
+									<div id="quantity_inc_button" class="quantity_inc quantity_control"><i class="fa fa-chevron-up" aria-hidden="true"></i></div>
+									<div id="quantity_dec_button" class="quantity_dec quantity_control"><i class="fa fa-chevron-down" aria-hidden="true"></i></div>
+								</div>
+							</div>
+							<div class="button cart_button">
+								<a href="#" onclick="event.preventDefault(); document.getElementById('add_to_cart').submit()">Добавить в корзину</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row description_row">
+			<div class="col">
+				<div class="description_title_container">
+					<div class="description_title">Описание</div>
+				</div>
+				<div id='desctiption' class="description_text">
+				{% if product.description|length > 1400%}
+					<div id="linear_desctiption"></div>
+				{% endif %}
+					<p>{{product.description}}</p>
+				</div>
+				{% if product.description|length > 1400%}
+					<div class="description_button_cont">
+						<div id='decr_but' class="button cart_button ">
+							<a id="description_button" href="#" >Показать полностью</a>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="products">
+	{% if relatives_color %}
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<div class="products_title">Другие цвета</div>
+				</div>
+			</div>
+
+			<div class="row my-5">
+				{% for relative in relatives_color%}
+				<div class="col-sm-3 col-6">
+					<div class="product_image"><img src="{{relative.photo.url}}" alt=""></div>
+
+					<div class="product_content">
+						<div class="product_title"><a href="{% url 'product_detail' category_slug=relative.category.slug pk=relative.vendor_code %}">{{relative.name}}</a></div>
+						<div class="product_price">{{relative.price}} ₽</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if relatives %}
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<div class="products_title">Похожие товары</div>
+				</div>
+			</div>
+
+			<div class="row my-5">
+				{% for relative in relatives%}
+				<div class="col-sm-3 col-6">
+					<div class="product_image"><img src="{{relative.photo.url}}" alt=""></div>
+
+					<div class="product_content">
+						<div class="product_title"><a href="{% url 'product_detail' category_slug=relative.category.slug pk=relative.vendor_code %}">{{relative.name}}</a></div>
+						<div class="product_price">{{relative.price}} ₽</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+
+
+
+		</div>
+	{% endif %}
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/product.js' %}"></script>
+{% endblock %}

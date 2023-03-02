@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/checkout.css' %} ">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/checkout_responsive.css' %} ">
+{% endblock %}
+
+{% block title %}
+Tech Haven - Оформление заказа
+{% endblock %}
+
+
+{% block content %}
+<div class="home">
+	<div class="home_container">
+			<div class="home_background" style="background-image:url(/static/images/cart.jpg)"></div>
+
+		<div class="home_content_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="home_content">
+							<div class="home_title">Корзина<span>.</span></div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<div class="checkout">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="billing checkout_section">
+						<div class="section_title">Адрес доставки</div>
+						<div class="checkout_form_container">
+							<form action="{% url 'new_order' %}" id="checkout_form" class="checkout_form" method="POST">
+								{% csrf_token %}
+								<div>
+									<label for="checkout_country">Город</label>
+									<span style="color:red">{{form.city.errors}}</span>
+									{{ form.city }}
+								</div>
+								<div>
+									<label for="checkout_address">Улица</label>
+									<span style="color:red">{{form.street.errors}}</span>
+									{{ form.street }}
+								</div>
+								<div class="row">
+									<div class="col-xl-6">
+										<label for="checkout_address">Номер дома</label>
+										<span style="color:red">{{form.street_num.errors}}</span>
+										{{ form.street_num }}
+									</div>
+									<div class="col-xl-6">
+										<label for="checkout_address">Номер квартиры</label>
+										<span style="color:red">{{form.appart_num.errors}}</span>
+										{{ form.appart_num }}
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="order checkout_section">
+						<div class="section_title">Оформление заказа</div>
+						<div class="section_subtitle">Детали заказа</div>
+						<div class="order_list_container">
+							<div class="order_list_bar d-flex flex-row align-items-center justify-content-start">
+								<div class="order_list_title">Товар</div>
+								<div class="order_list_value ml-auto">Цена</div>
+							</div>
+							<ul class="order_list">
+								{% for item in cart %}
+									{% with product=item.product %}
+										<li class="d-flex flex-row align-items-center justify-content-start">
+											<div class="order_list_title">{{ product.name }}</div>
+											<div class="order_list_value ml-auto">{{ product.price }}P</div>
+										</li>
+									{% endwith %}
+								{% endfor %}
+								<div class="separator"></div>
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="order_list_title">Итоговая стоимость</div>
+									<div class="order_list_value ml-auto">{{ cart.get_total_price }} Р</div>
+								</li>
+								<div class="separator"></div>
+								<span style="color:red">Внимание! Сайт не предназначен для коммерческих продаж! Сайт является учебным и не продаёт реальные товары.<br>
+Если вы хотите протестировать оплату, вы можете заглянуть в категорию "Разное" и выбрать товар за 1р. </span>
+							</ul>
+						</div>
+						<div class="payment"> 
+							<div class="payment_options">
+								Способ оплаты
+								<label class="payment_option clearfix">
+										Qiwi
+									<input type="radio" name="radio">
+									<span class="checkmark"></span>
+								</label>
+							</div>
+						</div>
+						<div class="button order_button">
+							<a id='submit_button' href="#">Перейти к оплате</a>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer_overlay"></div>
+	<footer class="footer">
+		<div class="footer_background" style="background-image:url(/static/images/footer.jpg)"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="footer_content d-flex flex-lg-row flex-column align-items-center justify-content-lg-start justify-content-center">
+						<div class="footer_logo"><a href="#">Sublime.</a></div>
+						<div class="copyright ml-auto mr-auto"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
+						<div class="footer_social ml-lg-auto">
+							<ul>
+								<li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+								<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+								<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/checkout.js' %}"></script>
+{% endblock %}
